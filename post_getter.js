@@ -1,11 +1,47 @@
-var Promise = require('bluebird');
+var es = require('event-stream');
 var request = require('request');
-Promise.promisifyAll(request);
 
 var config = require('./config.json');
 
+function fetchPage (pageUrl) {
+    return request.get(pageUrl)
+        .pipe(es.wait())
+        .pipe(es.through(function filterPosts (pageData) {
+            // Have we reached the last known post
+            done = false;
+            pageData.data.forEach(function checkPost (post) {
+
+            });
+            if (!done) {
+
+            }
+
+        })
+    ;
+}
+
 function GetFilteredPosts (pages, keywords, token, since) {
-    var reqs = pages.map(function getPage (page) {
+    var reqs = [];
+
+    function fetchPage (pageUrl) {
+        return request.get(pageUrl)
+            .pipe(es.wait())
+            .pipe(es.parse())
+            .pipe(es.through(function filterPosts (pageData) {
+                // Have we reached the last known post
+                done = false;
+                pageData.data.forEach(function checkPost (post) {
+                    if
+                });
+                if (!done) {
+
+                }
+
+            })
+        ;
+    }
+
+    pages.forEach(function getPage (page) {
         var req = request.get({
             // uri: {
             //     protocol: 'https',
@@ -16,13 +52,19 @@ function GetFilteredPosts (pages, keywords, token, since) {
             qs: {
                 access_token: token,
                 since: since
-            },
-            json: true
+            }
         });
-        req.pipe(es.through(function splitPage (pageData) {
-                console.log(pageData);
-            })).pipe(process.stdout)
-        ;
+
+
+        reqs.push(req.pipe(es.wait())
+           .pipe(es.parse())
+           .pipe(es.through(function splitPage (pageData) {
+
+            }))
+           .pipe(es.through(function filterPost (post) {
+
+           }))
+       );
     });
 }
 
