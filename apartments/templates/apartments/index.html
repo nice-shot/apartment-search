@@ -1,0 +1,15 @@
+{% extends "apartments/layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <h1>Jerusalem Apartment Hunt</h1>
+        <ul>
+            <li><a href="{% url 'apartments:new' %}">New</a></li>
+            <li><a href="{% url 'apartments:interesting' %}">Inetersting</a></li>
+            <li><a href="{% url 'apartments:trash' %}">Trash</a></li>
+            <li><a href="{% url 'apartments:settings' %}">Settings</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
