@@ -1,5 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.http import QueryDict
 
 from .models import Post
 
@@ -27,12 +29,17 @@ def trash(request):
     }
     return render(request, 'apartments/list.html', context)
 
-def update_post_interest(request, post_id, interesting):
-    post = get_object_or_404(Post, pk=post_id)
-    post.interesting = bool(interesting)
-    post.save()
-    return HttpResponse("Changed interest to %s on post %s" % (interesting,
-                                                               post_id))
+@csrf_exempt
+def update_post(request, post_id):
+    if request.method == 'PUT':
+        post = get_object_or_404(Post, pk=post_id)
+        put = QueryDict(request.body)
+        interest = bool(int(put.get("interesting")))
+        post.interesting = interest
+        post.save()
+        return HttpResponse("Changed interest to %s on post %s" % (interest,
+                                                                   post_id))
+    return HttpResponseNotAllowed(["PUT"])
 
 def settings(request):
     return render(request, 'apartments/index.html')

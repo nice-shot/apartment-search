@@ -30,7 +30,17 @@ $().ready(function () {
         window.open("https://facebook.com/" + id);
     });
     $(".post-keep").click(function () {
+        var base_url = "{% url 'apartments:post' %}";
         var id = getId(this);
+        $.ajax(base_url + "/" + id, {
+            method: "PUT",
+            data: {
+                "interesting": 0
+            },
+            success: function () {
+                console.log("Updated post: " + id);
+            }
+        })
     });
 });
 </script>
