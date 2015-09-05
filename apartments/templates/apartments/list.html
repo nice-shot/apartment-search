@@ -21,8 +21,12 @@
 {% block script %}
 <script type="text/javascript">
 $().ready(function () {
+    function getBtnPost(btn) {
+        return $(btn).parent().parent();
+    }
+
     function getId (btn) {
-        return $(btn).parent().parent().attr("id");
+        return getBtnPost(btn).attr("id");
     }
 
     $(".post-link").click(function () {
@@ -35,6 +39,8 @@ $().ready(function () {
         var id = getId(this);
         // Interet = 1 if it's a keeper and 0 if not
         var interest = +$(this).hasClass("post-keep");
+        var parent = getBtnPost(this);
+
         $.ajax(base_url + "/" + id, {
             method: "PUT",
             data: {
@@ -42,8 +48,9 @@ $().ready(function () {
             },
             success: function () {
                 console.log("Updated post: " + id);
+                parent.fadeOut();
             }
-        })
+        });
     });
 });
 </script>
