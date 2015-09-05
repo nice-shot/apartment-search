@@ -29,13 +29,16 @@ $().ready(function () {
         var id = getId(this);
         window.open("https://facebook.com/" + id);
     });
-    $(".post-keep").click(function () {
+
+    $(".post-keep, .post-remove").click(function () {
         var base_url = "{% url 'apartments:post' %}";
         var id = getId(this);
+        // Interet = 1 if it's a keeper and 0 if not
+        var interest = +$(this).hasClass("post-keep");
         $.ajax(base_url + "/" + id, {
             method: "PUT",
             data: {
-                "interesting": 0
+                "interesting": interest
             },
             success: function () {
                 console.log("Updated post: " + id);
