@@ -3,7 +3,7 @@ Holds the poll module
 """
 from django.db import models
 
-class Post (models.Model):
+class Post(models.Model):
     post_id = models.CharField(max_length=100, primary_key=True)
     message = models.TextField()
     user = models.CharField(max_length=300)
