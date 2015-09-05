@@ -1,3 +1,7 @@
+function 
+
+
+
 var es = require('event-stream');
 var request = require('request');
 
@@ -23,13 +27,22 @@ function fetchPage (pageUrl) {
 function GetFilteredPosts (pages, keywords, token, since) {
     var reqs = [];
 
-    function fetchPage (pageUrl) {
+    function fetchPage (pageUrl, lastId) {
         return request.get(pageUrl)
             .pipe(es.wait())
             .pipe(es.parse())
             .pipe(es.through(function filterPosts (pageData) {
                 // Have we reached the last known post
                 done = false;
+
+                for (var i=0; i < pageData.data.length; i++) {
+                    post = pageData.data[i];
+                    if (post.id === lastId) {
+                        done = true;
+                        break;
+                    }
+
+                }
                 pageData.data.forEach(function checkPost (post) {
                     if
                 });
