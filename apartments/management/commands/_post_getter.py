@@ -38,6 +38,8 @@ class PostGetter(object):
                 "limit": self.POST_LIMIT
             })
         )
+        self.log.info("Created new post fetcher for page: %s with words: %r",
+                      group_id, self.keywords)
 
     def get_posts(self, url=None):
         """
@@ -66,7 +68,7 @@ class PostGetter(object):
         paging = page_data.get("paging", {})
 
         if "next" in paging:
-            for post in self.get_post(paging["next"]):
+            for post in self.get_posts(paging["next"]):
                 yield post
 
         return
