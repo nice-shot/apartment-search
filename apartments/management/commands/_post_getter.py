@@ -52,7 +52,7 @@ class PostGetter(object):
         if not url:
             url = self.base_url
 
-        self.log.info("Getting URL: %s", url)
+        self.log.debug("Getting URL: %s", url)
         page_data = json.loads(urlopen(url).read().decode("utf-8"))
 
         for post in page_data.get("data", []):

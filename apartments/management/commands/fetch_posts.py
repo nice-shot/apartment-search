@@ -27,6 +27,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         log = logging.getLogger("post_fetch")
+        new_counter = 0
         for group in options["groups"]:
             post_gtter = PostGetter(group, options["words"], options["token"],
                                     options["since"])
@@ -43,5 +44,7 @@ class Command(BaseCommand):
                 )
                 if created:
                     log.debug("Added new post: %s", obj.post_id)
+                    new_counter += 1
                 else:
                     log.debug("Updated post: %s", obj.post_id)
+        log.info("Found %d new posts!", new_counter)
