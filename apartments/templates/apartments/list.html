@@ -15,7 +15,7 @@
                     </div>
                     <form class="form-inline">
                         <div class="form-group">
-                            <textarea class="form-control"></textarea>
+                            <textarea class="form-control">{{ post.comment }}</textarea>
                             <button type="button" class="btn btn-default post-comment-submit"
                              placeholder="Comment">Save</button>
                         </div>
@@ -31,7 +31,7 @@
 <script type="text/javascript">
 $().ready(function () {
     function getBtnPost(btn) {
-        return $(btn).parent().parent();
+        return $(btn).parent().parent().parent();
     }
 
     function getId (btn) {
@@ -43,8 +43,9 @@ $().ready(function () {
         window.open("https://facebook.com/" + id);
     });
 
+    var base_url = "{% url 'apartments:post' %}";
+
     $(".post-keep, .post-remove").click(function () {
-        var base_url = "{% url 'apartments:post' %}";
         var id = getId(this);
         // Interet = 1 if it's a keeper and 0 if not
         var interest = +$(this).hasClass("post-keep");
@@ -52,15 +53,34 @@ $().ready(function () {
 
         $.ajax(base_url + "/" + id, {
             method: "PUT",
-            data: {
+            data: JSON.stringify({
                 "interesting": interest
-            },
+            }),
+            contentType: "application/json; charset=UTF-8",
             success: function () {
                 console.log("Updated post: " + id);
                 parent.fadeOut();
             }
         });
     });
+
+    $(".post-comment-submit").click(function () {
+        // One more parent than the other buttons
+        var id = getBtnPost(this).parent().attr("id");
+        var comment =  $(this).prev().val();
+
+        $.ajax(base_url + "/" + id, {
+            method: "PUT",
+            data: JSON.stringify({
+                "comment": comment
+            }),
+            contentType: "application/json; charset=UTF-8",
+            success: function ()  {
+                console.log("Updated post: " + id);
+            }
+        });
+
+    })
 });
 </script>
 {% endblock %}

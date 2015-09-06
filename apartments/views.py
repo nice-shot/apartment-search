@@ -33,11 +33,11 @@ def trash(request):
 def update_post(request, post_id):
     if request.method == 'PUT':
         post = get_object_or_404(Post, pk=post_id)
-        put = json.loads(request.body)
-        post.interesting = put.get("interesting")
-        post.comment = put.get("comment", "")
+        put = json.loads(request.body.decode("utf-8"))
+        post.interesting = put.get("interesting", post.interesting)
+        post.comment = put.get("comment", post.comment)
         post.save()
-        return HttpResponse("Updated post: %d" % post_id)
+        return HttpResponse("Updated post: %s" % post_id)
     return HttpResponseNotAllowed(["PUT"])
 
 def settings(request):
