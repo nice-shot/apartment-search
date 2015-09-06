@@ -39,7 +39,7 @@ class PostGetter(object):
             })
         )
 
-    def get_post(self, url=None):
+    def get_posts(self, url=None):
         """
         Starts getting posts from the given page. If the url is omitted - grabs
         from the main page's feed
