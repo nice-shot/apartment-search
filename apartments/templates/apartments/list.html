@@ -8,18 +8,16 @@
                 <div class="panel-heading">{{ post.user }}</div>
                 <div class="panel-body">
                     <p>{{ post.message }}</p>
+                    <div class="dates">
+                        <p><small>Created: {{ post.created_time|timesince }}</small></p>
+                        <p><small>Updated: {{ post.updated_time|timesince }}</small></p>
+                    </div>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default post-keep">Keep</button>
                         <button type="button" class="btn btn-default post-link">Link</button>
                         <button type="button" class="btn btn-default post-remove">Remove</button>
+                        <textarea class="form-control post-comment">{{ post.comment }}</textarea>
                     </div>
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <textarea class="form-control">{{ post.comment }}</textarea>
-                            <button type="button" class="btn btn-default post-comment-submit"
-                             placeholder="Comment">Save</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         {% endfor %}
@@ -50,11 +48,13 @@ $().ready(function () {
         // Interet = 1 if it's a keeper and 0 if not
         var interest = +$(this).hasClass("post-keep");
         var parent = getBtnPost(this);
+        var comment = parent.find(".post-comment").val();
 
         $.ajax(base_url + "/" + id, {
             method: "PUT",
             data: JSON.stringify({
-                "interesting": interest
+                "interesting": interest,
+                "comment": comment
             }),
             contentType: "application/json; charset=UTF-8",
             success: function () {
@@ -63,24 +63,6 @@ $().ready(function () {
             }
         });
     });
-
-    $(".post-comment-submit").click(function () {
-        // One more parent than the other buttons
-        var id = getBtnPost(this).parent().attr("id");
-        var comment =  $(this).prev().val();
-
-        $.ajax(base_url + "/" + id, {
-            method: "PUT",
-            data: JSON.stringify({
-                "comment": comment
-            }),
-            contentType: "application/json; charset=UTF-8",
-            success: function ()  {
-                console.log("Updated post: " + id);
-            }
-        });
-
-    })
 });
 </script>
 {% endblock %}
