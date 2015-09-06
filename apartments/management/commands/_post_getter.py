@@ -26,7 +26,7 @@ class PostGetter(object):
         :param since: A date string used to filter old posts
         :type since: str
         """
-        self.log = logging.getLogger(__name__ + "." + group_id)
+        self.log = logging.getLogger("post_fetch.getter." + group_id)
         self.keywords = keywords
 
         self.base_url = "https://graph.facebook.com/v2.0/{}/feed?{}".format(

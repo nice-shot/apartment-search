@@ -1,8 +1,10 @@
 """
 Get's the latest relevant posts and uploads them to the DB
 """
-from django.core.management.base import BaseCommand
+import logging
 import datetime
+
+from django.core.management.base import BaseCommand
 
 from apartments.models import Post
 from _post_getter import PostGetter
@@ -24,6 +26,7 @@ class Command(BaseCommand):
                              default="2015-09-01")
 
     def handle(self, *args, **options):
+        log = logging.getLogger("post_fetch")
         for group in options["groups"]:
             post_gtter = PostGetter(group, options["words"], options["token"],
                                     options["since"])
@@ -34,5 +37,11 @@ class Command(BaseCommand):
                     "created_time": fetched_post["created_time"],
                     "updated_time": fetched_post["updated_time"]
                 }
-                Post.object.update_or_create(post_id=fetched_post["id"],
-                                             defaults=post_defaults)
+                obj, created = Post.object.update_or_create(
+                    post_id=fetched_post["id"],
+                    defaults=post_defaults
+                )
+                if created:
+                    log.debug("Added new post: %s", obj.post_id)
+                else:
+                    log.debug("Updated post: %s", obj.post_id)
