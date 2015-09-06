@@ -12,3 +12,4 @@ class Post(models.Model):
     updated_time = models.DateTimeField()
     found_time = models.DateTimeField(auto_now_add=True)
     interesting = models.NullBooleanField()
+    comment = models.TextField(blank=True)

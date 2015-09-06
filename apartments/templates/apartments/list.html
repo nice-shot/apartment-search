@@ -6,11 +6,13 @@
         {% for post in apartment_posts %}
             <div class="panel panel-default" id={{ post.post_id }}>
                 <div class="panel-heading">{{ post.user }}</div>
-                <div class="panel-body">{{ post.message }}</div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default post-keep">Keep</button>
-                    <button type="button" class="btn btn-default post-link">Link</button>
-                    <button type="button" class="btn btn-default post-remove">Remove</button>
+                <div class="panel-body">
+                    <p>{{ post.message }}</p>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default post-keep">Keep</button>
+                        <button type="button" class="btn btn-default post-link">Link</button>
+                        <button type="button" class="btn btn-default post-remove">Remove</button>
+                    </div>
                 </div>
             </div>
         {% endfor %}

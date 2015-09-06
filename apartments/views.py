@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.http import QueryDict
+import json
 
 from .models import Post
 
@@ -33,12 +33,11 @@ def trash(request):
 def update_post(request, post_id):
     if request.method == 'PUT':
         post = get_object_or_404(Post, pk=post_id)
-        put = QueryDict(request.body)
-        interest = bool(int(put.get("interesting")))
-        post.interesting = interest
+        put = json.loads(request.body)
+        post.interesting = put.get("interesting")
+        post.comment = put.get("comment", "")
         post.save()
-        return HttpResponse("Changed interest to %s on post %s" % (interest,
-                                                                   post_id))
+        return HttpResponse("Updated post: %d" % post_id)
     return HttpResponseNotAllowed(["PUT"])
 
 def settings(request):
