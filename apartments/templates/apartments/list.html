@@ -34,7 +34,12 @@
 {% block script %}
 <script type="text/javascript">
 $().ready(function () {
-    function getBtnPost(btn) {
+    // Make buttons pop up on mobile after pressed
+    $(".btn").on("touchend", function () {
+        $(this).css("background-color", "inherit");
+    });
+
+    function getBtnPost (btn) {
         return $(btn).parent().parent().parent();
     }
 
