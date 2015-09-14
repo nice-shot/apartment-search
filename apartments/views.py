@@ -11,21 +11,21 @@ def index(request):
 def new(request):
     context = {
         'title': 'New Posts!',
-        'apartment_posts': Post.objects.filter(interesting=None).order_by('found_time')
+        'apartment_posts': Post.objects.filter(interesting=None).order_by('-created_time')
     }
     return render(request, 'apartments/list.html', context)
 
 def interesting(request):
     context = {
         'title': 'Interesting',
-        'apartment_posts': Post.objects.filter(interesting=True).order_by('found_time')
+        'apartment_posts': Post.objects.filter(interesting=True).order_by('-created_time')
     }
     return render(request, 'apartments/list.html', context)
 
 def trash(request):
     context = {
         'title': 'Trash',
-        'apartment_posts': Post.objects.filter(interesting=False).order_by('found_time')
+        'apartment_posts': Post.objects.filter(interesting=False).order_by('-created_time')
     }
     return render(request, 'apartments/list.html', context)
 
