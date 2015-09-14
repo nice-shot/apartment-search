@@ -13,7 +13,13 @@
                         <p><small>Updated: {{ post.updated_time|timesince }}</small></p>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default post-keep">Keep</button>
+                        <button type="button" class="btn btn-default post-keep">
+                            {% if title == 'Interesting' %}
+                                Save
+                            {% else %}
+                                Keep
+                            {% endif %}
+                        </button>
                         <button type="button" class="btn btn-default post-link">Link</button>
                         <button type="button" class="btn btn-default post-remove">Remove</button>
                         <textarea class="form-control post-comment">{{ post.comment }}</textarea>
@@ -45,6 +51,7 @@ $().ready(function () {
 
     $(".post-keep, .post-remove").click(function () {
         var id = getId(this);
+        var isSave = $(this).text().trim() === "Save"
         // Interet = 1 if it's a keeper and 0 if not
         var interest = +$(this).hasClass("post-keep");
         var parent = getBtnPost(this);
@@ -58,8 +65,9 @@ $().ready(function () {
             }),
             contentType: "application/json; charset=UTF-8",
             success: function () {
-                console.log("Updated post: " + id);
-                parent.fadeOut();
+                if (!isSave) {
+                    parent.remove();
+                }
             }
         });
     });
